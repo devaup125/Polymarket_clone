@@ -29,11 +29,11 @@ To keep the application safe and accessible for demonstration purposes, it compl
 
 ```text
 polymarket-clone/
-├── backend/                  # Python Flask Engine
-│   ├── app.py                # Main server routes & gateway
-│   ├── db.py                 # Database initialization & connections
-│   ├── Dockerfile            # Python environment compilation script
-│   └── requirements.txt      # Python dependencies list
-├── frontend/                 # React UI Application
-│   └── Dockerfile            # Node environment compilation script
-└── docker-compose.yml        # Multi-container orchestration blueprint
+├── backend/                  # Python Flask Engine
+│   ├── app.py                # Main server routes & gateway
+│   ├── db.py                 # Database initialization & connections
+│   ├── Dockerfile            # Python environment compilation script
+│   └── requirements.txt      # Python dependencies list
+├── frontend/                 # React UI Application
+│   └── Dockerfile            # Node environment compilation script
+└── docker-compose.yml        # Multi-container orchestration blueprint UPDATE THI S
