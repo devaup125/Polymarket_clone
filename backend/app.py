@@ -113,5 +113,15 @@ def buy_share():
         "updated_portfolio": portfolio
     }), 200
 
+    # 5. FETCH SINGLE USER PROFILE
+@app.route('/api/users/<user_name>', methods=['GET'])
+def get_user(user_name):
+    user = users_collection.find_one({"username": user_name})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
+    user.pop("_id", None)
+    return jsonify(user), 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
