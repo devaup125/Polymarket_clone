@@ -4,7 +4,9 @@ import sys
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://db:27017/polymarket")
+import os
+
+MONGO_URI = os.environ["MONGO_URI"]
 
 print("Connecting to MongoDB...")
 client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=2000)
