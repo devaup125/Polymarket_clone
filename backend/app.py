@@ -6,6 +6,12 @@ import uuid
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/")
+def home():
+    return {
+        "status": "Backend is running",
+        "message": "Polymarket Clone API"
+    }
 # 1. USER REGISTRATION
 @app.route('/api/users/register', methods=['POST'])
 def register_user():
