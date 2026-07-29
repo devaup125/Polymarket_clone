@@ -181,22 +181,25 @@ a{
 }
 
 }
-.market-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-}
+
+
 @media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
 
-    .main-content {
-        width: 100%;
-        padding: 12px;
-    }
+  .app{
+    flex-direction: column;
+  }
 
-    .market-grid {
-        grid-template-columns: 1fr;
-    }
+  .main-content{
+    width:100%;
+    margin-left:0;
+    padding:10px;
+  }
+
+  .content{
+    padding:10px;
+  }
+
+  .market-grid{
+    grid-template-columns:1fr;
+  }
 }

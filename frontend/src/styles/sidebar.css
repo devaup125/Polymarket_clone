@@ -104,3 +104,25 @@
 }
 
 }
+@media (max-width:768px){
+
+.sidebar{
+    width:70px;
+}
+
+.sidebar .menu-text{
+    display:none;
+}
+
+.sidebar h2{
+    display:none;
+}
+
+.sidebar span{
+    display:none;
+}
+
+.sidebar li{
+    justify-content:center;
+}
+}

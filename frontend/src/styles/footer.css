@@ -85,3 +85,15 @@
 }
 
 }
+@media(max-width:768px){
+
+.footer{
+    flex-direction:column;
+    text-align:center;
+}
+
+.footer-column{
+    width:100%;
+    margin-bottom:20px;
+}
+}
