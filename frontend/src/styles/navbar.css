@@ -1,0 +1,154 @@
+.navbar{
+    width:100%;
+    height:75px;
+    background:#111827;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    box-sizing:border-box;
+    border-bottom:1px solid #242c3d;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.navbar-logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    font-size:28px;
+}
+
+.navbar-logo h2{
+    color:white;
+    margin:0;
+    font-size:24px;
+}
+
+.navbar-search{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:0 40px;
+}
+
+.navbar-search input{
+    width:100%;
+    max-width:550px;
+    padding:12px 18px;
+    border:none;
+    border-radius:30px;
+    background:#1f2937;
+    color:white;
+    outline:none;
+    font-size:15px;
+}
+
+.navbar-search input::placeholder{
+    color:#94a3b8;
+}
+
+.navbar-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.icon-btn{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#1f2937;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.icon-btn:hover{
+    background:#2563eb;
+}
+
+.balance-pill{
+    background:#16a34a;
+    color:white;
+    padding:10px 18px;
+    border-radius:30px;
+    font-weight:600;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#2563eb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+    font-weight:bold;
+    color:white;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.welcome{
+    color:#9ca3af;
+    font-size:12px;
+}
+
+.name{
+    color:white;
+    font-weight:600;
+}
+
+@media (max-width:900px){
+
+.navbar{
+    flex-wrap:wrap;
+    height:auto;
+    padding:15px;
+    gap:15px;
+}
+
+.navbar-search{
+    order:3;
+    width:100%;
+    padding:0;
+}
+
+.navbar-right{
+    margin-left:auto;
+}
+
+}
+
+@media (max-width:600px){
+
+.profile-info{
+    display:none;
+}
+
+.balance-pill{
+    display:none;
+}
+
+.navbar-logo h2{
+    font-size:18px;
+}
+
+}

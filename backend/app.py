@@ -6,128 +6,273 @@ import uuid
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
+
+# -----------------------------
+# HOME
+# -----------------------------
+@app.route("/", methods=["GET"])
 def home():
-    return {
-        "status": "Backend is running",
-        "message": "Polymarket Clone API"
-    }
-# 1. USER REGISTRATION
-@app.route('/api/users/register', methods=['POST'])
-def register_user():
-    data = request.json or {}
-    username = data.get("username")
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
-    if users_collection.find_one({"username": username}):
-        return jsonify({"error": "Username is already taken"}), 409
-
-    new_user = {
-        "user_id": str(uuid.uuid4()),
-        "username": username,
-        "balance": 1000.00,
-        "portfolio": {"Yes_shares": {}, "No_shares": {}}
-    }
-    users_collection.insert_one(new_user)
-    new_user.pop("_id", None)
-    return jsonify({"message": "User registered successfully!", "user": new_user}), 201
-
-# 2. FETCH ALL MARKETS
-@app.route('/api/markets', methods=['GET'])
-def get_all_markets():
-    markets = list(markets_collection.find({"status": "open"}))
-    for m in markets:
-        m.pop("_id", None)
-    return jsonify({"markets": markets}), 200
-
-# 3. CREATE A MARKET
-@app.route('/api/markets/create', methods=['POST'])
-def create_market():
-    data = request.json or {}
-    title = data.get("title")
-    category = data.get("category")
-    if not title or not category:
-        return jsonify({"error": "Title and Category are required"}), 400
-
-    new_market = {
-        "market_id": str(uuid.uuid4()),
-        "title": title,
-        "category": category,
-        "status": "open",
-        "yes_price": 0.50,
-        "no_price": 0.50,
-        "total_yes_shares": 0,
-        "total_no_shares": 0
-    }
-    markets_collection.insert_one(new_market)
-    new_market.pop("_id", None)
-    return jsonify({"message": "Market created!", "market": new_market}), 201
-
-# 4. BUY A SHARE (THE TRADING ENGINE)
-@app.route('/api/trades/buy', methods=['POST'])
-def buy_share():
-    data = request.json or {}
-    username = data.get("username")
-    market_id = data.get("market_id")
-    outcome = data.get("outcome")
-    
-    if not username or not market_id or outcome not in ["YES", "NO"]:
-        return jsonify({"error": "Missing fields"}), 400
-
-    user = users_collection.find_one({"username": username})
-    market = markets_collection.find_one({"market_id": market_id})
-    
-    if not user:
-        return jsonify({"error": "User profile not found"}), 404
-    if not market:
-        return jsonify({"error": "Market not found"}), 404
-    if market.get("status") != "open":
-        return jsonify({"error": "This market has already closed"}), 400
-
-    share_price = market["yes_price"] if outcome == "YES" else market["no_price"]
-
-    if user["balance"] < share_price:
-        return jsonify({"error": "Insufficient wallet balance"}), 400
-
-    new_user_balance = round(user["balance"] - share_price, 2)
-    
-    portfolio = user.get("portfolio", {"Yes_shares": {}, "No_shares": {}})
-    share_key = "Yes_shares" if outcome == "YES" else "No_shares"
-    current_shares = portfolio.get(share_key, {}).get(market_id, 0)
-    
-    if share_key not in portfolio:
-        portfolio[share_key] = {}
-    portfolio[share_key][market_id] = current_shares + 1
-
-    market_update_key = "total_yes_shares" if outcome == "YES" else "total_no_shares"
-    new_market_share_total = market.get(market_update_key, 0) + 1
-
-    users_collection.update_one(
-        {"username": username},
-        {"$set": {"balance": new_user_balance, "portfolio": portfolio}}
-    )
-    markets_collection.update_one(
-        {"market_id": market_id},
-        {"$set": {market_update_key: new_market_share_total}}
-    )
-
     return jsonify({
-        "message": "Trade executed successfully!",
-        "outcome_purchased": outcome,
-        "price_paid": share_price,
-        "remaining_balance": new_user_balance,
-        "updated_portfolio": portfolio
+        "status": "success",
+        "message": "Polymarket Clone Backend Running"
     }), 200
 
-    # 5. FETCH SINGLE USER PROFILE
-@app.route('/api/users/<user_name>', methods=['GET'])
-def get_user(user_name):
-    user = users_collection.find_one({"username": user_name})
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    
-    user.pop("_id", None)
-    return jsonify(user), 200
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# -----------------------------
+# REGISTER USER
+# -----------------------------
+@app.route("/api/users/register", methods=["POST"])
+def register_user():
+    try:
+        data = request.get_json()
+
+        username = data.get("username", "").strip()
+
+        if username == "":
+            return jsonify({
+                "success": False,
+                "error": "Username is required"
+            }), 400
+
+        existing = users_collection.find_one({"username": username})
+
+        if existing:
+            return jsonify({
+                "success": False,
+                "error": "Username already exists"
+            }), 409
+
+        user = {
+            "user_id": str(uuid.uuid4()),
+            "username": username,
+            "balance": 1000.0,
+            "portfolio": {
+                "Yes_shares": {},
+                "No_shares": {}
+            }
+        }
+
+        users_collection.insert_one(user)
+
+        user.pop("_id", None)
+
+        return jsonify({
+            "success": True,
+            "message": "User registered successfully",
+            "user": user
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+# -----------------------------
+# GET USER
+# -----------------------------
+@app.route("/api/users/<username>", methods=["GET"])
+def get_user(username):
+
+    user = users_collection.find_one({"username": username})
+
+    if not user:
+        return jsonify({
+            "success": False,
+            "error": "User not found"
+        }), 404
+
+    user.pop("_id", None)
+
+    return jsonify({
+        "success": True,
+        "user": user
+    })
+
+
+# -----------------------------
+# GET MARKETS
+# -----------------------------
+@app.route("/api/markets", methods=["GET"])
+def get_markets():
+
+    markets = list(markets_collection.find({"status": "open"}))
+
+    for market in markets:
+        market.pop("_id", None)
+
+    return jsonify({
+        "success": True,
+        "markets": markets
+    })
+
+
+# -----------------------------
+# CREATE MARKET
+# -----------------------------
+@app.route("/api/markets/create", methods=["POST"])
+def create_market():
+
+    try:
+
+        data = request.get_json()
+
+        title = data.get("title", "").strip()
+        category = data.get("category", "").strip()
+
+        if title == "" or category == "":
+            return jsonify({
+                "success": False,
+                "error": "Title and category are required"
+            }), 400
+
+        duplicate = markets_collection.find_one({
+            "title": title
+        })
+
+        if duplicate:
+            return jsonify({
+                "success": False,
+                "error": "Market already exists"
+            }), 409
+
+        market = {
+            "market_id": str(uuid.uuid4()),
+            "title": title,
+            "category": category,
+            "status": "open",
+            "yes_price": 0.50,
+            "no_price": 0.50,
+            "total_yes_shares": 0,
+            "total_no_shares": 0
+        }
+
+        markets_collection.insert_one(market)
+
+        market.pop("_id", None)
+
+        return jsonify({
+            "success": True,
+            "message": "Market created successfully",
+            "market": market
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+# -----------------------------
+# BUY SHARE
+# -----------------------------
+@app.route("/api/trades/buy", methods=["POST"])
+def buy_share():
+
+    try:
+
+        data = request.get_json()
+
+        username = data.get("username")
+        market_id = data.get("market_id")
+        outcome = data.get("outcome")
+
+        if not username or not market_id or outcome not in ["YES", "NO"]:
+            return jsonify({
+                "success": False,
+                "error": "Invalid request"
+            }), 400
+
+        user = users_collection.find_one({
+            "username": username
+        })
+
+        if not user:
+            return jsonify({
+                "success": False,
+                "error": "User not found"
+            }), 404
+
+        market = markets_collection.find_one({
+            "market_id": market_id
+        })
+
+        if not market:
+            return jsonify({
+                "success": False,
+                "error": "Market not found"
+            }), 404
+
+        if market["status"] != "open":
+            return jsonify({
+                "success": False,
+                "error": "Market closed"
+            }), 400
+
+        price = market["yes_price"] if outcome == "YES" else market["no_price"]
+
+        if user["balance"] < price:
+            return jsonify({
+                "success": False,
+                "error": "Insufficient balance"
+            }), 400
+
+        balance = round(user["balance"] - price, 2)
+
+        portfolio = user.get("portfolio", {
+            "Yes_shares": {},
+            "No_shares": {}
+        })
+
+        key = "Yes_shares" if outcome == "YES" else "No_shares"
+
+        portfolio.setdefault(key, {})
+
+        portfolio[key][market_id] = portfolio[key].get(market_id, 0) + 1
+
+        market_key = "total_yes_shares" if outcome == "YES" else "total_no_shares"
+
+        markets_collection.update_one(
+            {"market_id": market_id},
+            {
+                "$inc": {
+                    market_key: 1
+                }
+            }
+        )
+
+        users_collection.update_one(
+            {"username": username},
+            {
+                "$set": {
+                    "balance": balance,
+                    "portfolio": portfolio
+                }
+            }
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "Trade successful",
+            "remaining_balance": balance,
+            "portfolio": portfolio
+        })
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+# -----------------------------
+# RUN SERVER
+# -----------------------------
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )

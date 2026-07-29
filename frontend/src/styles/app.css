@@ -1,0 +1,183 @@
+/* Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter",sans-serif;
+}
+
+body{
+    background:#0b0e14;
+    color:white;
+    overflow-x:hidden;
+}
+
+#root{
+    width:100%;
+    min-height:100vh;
+}
+
+/* ==========================
+   Main Layout
+========================== */
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+.main-content{
+    flex:1;
+    margin-left:260px;
+    background:#0b0e14;
+    min-height:100vh;
+}
+
+/* ==========================
+   Content
+========================== */
+
+.content{
+    padding:30px;
+    max-width:1400px;
+    margin:auto;
+}
+
+/* ==========================
+   Section Heading
+========================== */
+
+.section-title{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:25px;
+    color:#ffffff;
+}
+
+/* ==========================
+   Grid Layout
+========================== */
+
+.market-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:25px;
+}
+
+/* ==========================
+   Utility Cards
+========================== */
+
+.card{
+    background:#171b26;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.30);
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+button{
+    cursor:pointer;
+    border:none;
+    transition:.3s ease;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* ==========================
+   Links
+========================== */
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* ==========================
+   Scrollbar
+========================== */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#2563eb;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#3b82f6;
+}
+
+/* ==========================
+   Loading
+========================== */
+
+.loading{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:300px;
+    font-size:22px;
+    color:#94a3b8;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:992px){
+
+.main-content{
+    margin-left:75px;
+}
+
+.content{
+    padding:20px;
+}
+
+.market-grid{
+    grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.main-content{
+    margin-left:0;
+}
+
+.content{
+    padding:15px;
+}
+
+.section-title{
+    font-size:22px;
+}
+
+}
+
+@media(max-width:480px){
+
+.content{
+    padding:10px;
+}
+
+.section-title{
+    font-size:20px;
+}
+
+}

@@ -1,0 +1,109 @@
+.portfolio{
+    background:#171b26;
+    border-radius:18px;
+    padding:25px;
+    color:white;
+    margin-top:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+
+.portfolio-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.status{
+    background:#16a34a;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:14px;
+}
+
+.portfolio-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:#202636;
+    padding:20px;
+    border-radius:14px;
+    text-align:center;
+}
+
+.stat-card h4{
+    color:#9ca3af;
+    margin-bottom:10px;
+}
+
+.stat-card h2{
+    margin:0;
+}
+
+.recent-trades h3{
+    margin-bottom:20px;
+}
+
+.trade-item{
+    background:#202636;
+    padding:18px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.trade-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+}
+
+.amount{
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.won{
+    color:#22c55e;
+    font-weight:bold;
+}
+
+.lost{
+    color:#ef4444;
+    font-weight:bold;
+}
+
+.open{
+    color:#f59e0b;
+    font-weight:bold;
+}
+
+.empty{
+    color:#9ca3af;
+    text-align:center;
+    padding:20px;
+}
+
+@media(max-width:768px){
+
+.portfolio-stats{
+    grid-template-columns:1fr;
+}
+
+.trade-item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.trade-right{
+    align-items:flex-start;
+}
+
+}
